@@ -141,6 +141,7 @@
     right: 0;
     width: 280px;
     height: 100vh;
+    z-index: 1000;
     background: rgba(10, 10, 15, 0.97);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
