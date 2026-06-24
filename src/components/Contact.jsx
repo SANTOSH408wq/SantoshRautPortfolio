@@ -1,23 +1,51 @@
 import { useState } from 'react'
 import './Contact.css'
 
+const API_URL = '/api/send-email'
+
 export function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
   })
+  const [status, setStatus] = useState(null) // 'sending' | 'success' | 'error'
+  const [statusMessage, setStatusMessage] = useState('')
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission — connect to your backend or email service
-    console.log('Form submitted:', formData)
-    alert('Thanks for reaching out! I\'ll get back to you soon.')
-    setFormData({ name: '', email: '', message: '' })
+    setStatus('sending')
+    setStatusMessage('')
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setStatus('success')
+        setStatusMessage('Message sent successfully! I\'ll get back to you soon.')
+        setFormData({ name: '', email: '', message: '' })
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => setStatus(null), 5000)
+      } else {
+        setStatus('error')
+        setStatusMessage(data.error || 'Failed to send message. Please try again.')
+        setTimeout(() => setStatus(null), 5000)
+      }
+    } catch (err) {
+      setStatus('error')
+      setStatusMessage('Network error. Please check your connection and try again.')
+      setTimeout(() => setStatus(null), 5000)
+    }
   }
 
   return (
@@ -78,11 +106,36 @@ export function Contact() {
               ></textarea>
             </div>
 
-            <button type="submit" className="contact__submit" id="contact-submit">
-              Send Message
-              <span className="contact__submit-arrow">→</span>
+            <button
+              type="submit"
+              className={`contact__submit ${status === 'sending' ? 'contact__submit--loading' : ''}`}
+              id="contact-submit"
+              disabled={status === 'sending'}
+            >
+              {status === 'sending' ? (
+                <>
+                  <span className="contact__spinner"></span>
+                  Sending...
+                </>
+              ) : (
+                <>
+                  Send Message
+                  <span className="contact__submit-arrow">→</span>
+                </>
+              )}
             </button>
+
+            {/* Status notification */}
+            {status && status !== 'sending' && (
+              <div className={`contact__toast contact__toast--${status}`} id="contact-toast">
+                <span className="contact__toast-icon">
+                  {status === 'success' ? '✓' : '✕'}
+                </span>
+                <span className="contact__toast-message">{statusMessage}</span>
+              </div>
+            )}
           </form>
+
 
           <div className="contact__info">
             <div className="contact__info-card">
