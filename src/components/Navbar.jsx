@@ -33,7 +33,8 @@ export function Navbar() {
     setMobileOpen(false)
     const el = document.getElementById(targetId)
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
+      const y = el.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: y, behavior: 'smooth' })
     }
   }
 

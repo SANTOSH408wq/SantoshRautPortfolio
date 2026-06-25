@@ -2,13 +2,14 @@
 
 .hero {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: 120px 0 60px;
+  padding: 160px 0 0;
 }
 
 /* Background Glow */
@@ -353,7 +354,7 @@
 /* Scroll Indicator */
 .hero__scroll-indicator {
   position: absolute;
-  bottom: 30px;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -372,12 +373,12 @@
 }
 
 .hero__scroll-line {
-  width: 1px;
+  width: 2px;
   height: 40px;
-  background: var(--border-subtle);
+  background: rgba(255, 255, 255, 0.4);
   position: relative;
   overflow: hidden;
-  border-radius: 1px;
+  border-radius: 2px;
 }
 
 .hero__scroll-dot {
@@ -391,17 +392,13 @@
 }
 
 @keyframes scrollBounce {
-
-  0%,
-  100% {
+  0% {
     top: 0;
     opacity: 0;
   }
-
   30% {
     opacity: 1;
   }
-
   100% {
     top: 100%;
     opacity: 0;

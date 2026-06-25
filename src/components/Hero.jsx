@@ -33,14 +33,22 @@ export function Hero() {
           <div className="hero__actions">
             <a href="#work" className="hero__btn hero__btn--primary" onClick={(e) => {
               e.preventDefault()
-              document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' })
+              const el = document.getElementById('work')
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY;
+                window.scrollTo({ top: y, behavior: 'smooth' })
+              }
             }}>
               View My Work
               <span className="hero__btn-arrow">→</span>
             </a>
             <a href="#contact" className="hero__btn hero__btn--secondary" onClick={(e) => {
               e.preventDefault()
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+              const el = document.getElementById('contact')
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY;
+                window.scrollTo({ top: y, behavior: 'smooth' })
+              }
             }}>
               Get In Touch
             </a>
